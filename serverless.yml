@@ -1,0 +1,34 @@
+service: api-template # Name of your service
+
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: nodejs18.x # Use the latest runtime supported
+  region: us-east-1 # Adjust to your preferred region
+  environment:
+    NODE_ENV: production # Example environment variable
+  lambdaHashingVersion: 20201221 # Recommended for compatibility
+
+plugins:
+  - serverless-plugin-typescript
+
+functions:
+  api:
+    handler: dist/server.handler # Adjust this to the path of your handler file
+    events:
+      - http:
+          path: /{proxy+} # Catch-all route for your API
+          method: ANY
+
+package:
+  exclude:
+    - node_modules/**
+    - src/**
+    - test/**
+    - coverage/**
+
+custom:
+  serverless-offline:
+    httpPort: 3001 # If you use serverless-offline plugin
+
